@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-<script src="app.js" defer></script> pr
+<script src="app.js" defer></script>
   <div class="blob blob1"></div>
   <div class="blob blob2"></div>
   <div class="blob blob3"></div>
@@ -51,6 +51,50 @@
       <div class="photo-actions">
         <button class="btn-ph-cancel" id="photoCancel">Cancel</button>
         <button class="btn-ph-apply"  id="photoApply">Apply Photo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sign Up Modal -->
+  <div class="modal-overlay" id="signupOverlay">
+    <div class="modal signup-modal">
+      <h2>🎉 Create Account</h2>
+      <p>Join BondUp and start connecting with friends!</p>
+      <div class="input-group">
+        <label for="regDisplayName">Full Name</label>
+        <div class="input-wrap">
+          <input type="text" id="regDisplayName" placeholder="e.g. Ronak Gupta"/>
+          <span class="icon">👤</span>
+        </div>
+        <span class="error-msg" id="regNameErr"></span>
+      </div>
+      <div class="input-group">
+        <label for="regEmail">Email Address</label>
+        <div class="input-wrap">
+          <input type="email" id="regEmail" placeholder="you@example.com"/>
+          <span class="icon">✉️</span>
+        </div>
+        <span class="error-msg" id="regEmailErr"></span>
+      </div>
+      <div class="input-group">
+        <label for="regUsername">Username</label>
+        <div class="input-wrap">
+          <input type="text" id="regUsername" placeholder="e.g. ronak_gupta"/>
+          <span class="icon">🆔</span>
+        </div>
+        <span class="error-msg" id="regUsernameErr"></span>
+      </div>
+      <div class="input-group">
+        <label for="regPassword">Password</label>
+        <div class="input-wrap">
+          <input type="password" id="regPassword" placeholder="Min 6 characters"/>
+          <span class="icon">🔒</span>
+        </div>
+        <span class="error-msg" id="regPasswordErr"></span>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-m-cancel" id="signupCancel">Cancel</button>
+        <button class="btn-m-send" id="signupSubmit">Create Account</button>
       </div>
     </div>
   </div>
@@ -216,7 +260,7 @@
           <div class="people-grid" id="peopleGrid"></div>
           <div class="section-head">
             <h3>🤝 My Friends</h3>
-            <span class="see-all">Manage</span>
+            <span class="see-all" id="manageFriendsLink">Manage</span>
           </div>
           <div class="people-grid" id="myFriendsGrid"></div>
         </div>
@@ -310,6 +354,96 @@
           </div>
         </div>
 
+        <!-- ── FRIENDS PANEL ── -->
+        <div class="panel" id="friendsPanel">
+          <button class="back-btn" id="friendsPanelBack">← Back to Home</button>
+          <div class="panel-header">
+            <h2>👥 My Friends</h2>
+            <div class="panel-header-sub">Manage your connections</div>
+          </div>
+          <div class="friends-search-bar">
+            <input type="text" id="friendsPanelSearch" placeholder="🔍 Search your friends…" oninput="filterFriendsPanel()"/>
+          </div>
+          <div class="friends-stats-row">
+            <div class="friends-stat-chip"><strong id="fpTotalFriends">0</strong> Friends</div>
+            <div class="friends-stat-chip"><strong id="fpMutualAvg">0</strong> Avg Mutual</div>
+          </div>
+          <div class="friends-panel-grid" id="friendsPanelGrid"></div>
+        </div>
+
+        <!-- ── PHOTOS PANEL ── -->
+        <div class="panel" id="photosPanel">
+          <button class="back-btn" id="photosPanelBack">← Back to Home</button>
+          <div class="panel-header">
+            <h2>📸 Photo Gallery</h2>
+            <div class="panel-header-sub">All photos shared on BondUp</div>
+          </div>
+          <div id="photosGallery" class="photos-gallery"></div>
+          <div id="photosEmpty" class="panel-empty" style="display:none;">
+            <div class="empty-icon">📸</div>
+            <p>No photos yet.<br/>Share a photo in your post to see it here!</p>
+          </div>
+        </div>
+
+        <!-- ── EVENTS PANEL ── -->
+        <div class="panel" id="eventsPanel">
+          <button class="back-btn" id="eventsPanelBack">← Back to Home</button>
+          <div class="panel-header">
+            <h2>🏷️ Events</h2>
+            <div class="panel-header-sub">Campus happenings & meetups</div>
+          </div>
+          <div class="event-form-card">
+            <div class="event-form-title"><span>📅</span> Create an Event</div>
+            <div class="event-form-grid">
+              <div class="event-field full">
+                <label for="eventTitle">Event Title</label>
+                <input type="text" id="eventTitle" placeholder="e.g. DSA Study Group" maxlength="60"/>
+              </div>
+              <div class="event-field full">
+                <label for="eventDesc">Description</label>
+                <input type="text" id="eventDesc" placeholder="What's the event about?" maxlength="200"/>
+              </div>
+              <div class="event-field">
+                <label for="eventDate">Date</label>
+                <input type="date" id="eventDate"/>
+              </div>
+              <div class="event-field">
+                <label for="eventTime">Time</label>
+                <input type="time" id="eventTime"/>
+              </div>
+              <div class="event-field full">
+                <label for="eventLocation">Location</label>
+                <input type="text" id="eventLocation" placeholder="e.g. Library, Block A" maxlength="100"/>
+              </div>
+            </div>
+            <span class="emoji-label">Pick an Emoji</span>
+            <div class="event-emoji-row" id="eventEmojiRow"></div>
+            <div class="event-form-error" id="eventFormErr"></div>
+            <button class="btn-create-event" id="createEventBtn">📅 Create Event</button>
+          </div>
+          <div class="event-list-card">
+            <div class="event-list-header">
+              <h3>📋 All Events</h3>
+              <span class="event-count-pill" id="eventCountPill">0</span>
+            </div>
+            <div id="eventList"></div>
+          </div>
+        </div>
+
+        <!-- ── SAVED POSTS PANEL ── -->
+        <div class="panel" id="savedPanel">
+          <button class="back-btn" id="savedPanelBack">← Back to Home</button>
+          <div class="panel-header">
+            <h2>🔖 Saved Posts</h2>
+            <div class="panel-header-sub">Your bookmarked posts</div>
+          </div>
+          <div id="savedFeed"></div>
+          <div id="savedEmpty" class="panel-empty" style="display:none;">
+            <div class="empty-icon">🔖</div>
+            <p>No saved posts yet.<br/>Bookmark posts from the feed to see them here!</p>
+          </div>
+        </div>
+
       </main>
 
       <!-- RIGHT SIDEBAR -->
@@ -366,7 +500,7 @@
     </div>
   </div>
 
-<script src="app.js" defer></script>
+
 
   <!-- Send Message Modal (quick message from friend card) -->
   <div class="send-msg-overlay" id="sendMsgOverlay">
