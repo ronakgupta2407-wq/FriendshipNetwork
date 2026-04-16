@@ -2,6 +2,7 @@
 *.exe
 *.o
 *.obj
+server
 
 # IDE
 .vs/
@@ -13,13 +14,13 @@
 Thumbs.db
 .DS_Store
 
-# Old reference files (not needed for deployment)
-/Frontend/
-/Backend/
-
-# Data files (generated at runtime)
+# Data files
 data.json
 
 # Temp
 *.7z
 *.tmp
+
+# MinGW compatibility headers (not needed for deployment)
+backend/mingw.*.h
+backend/httplib.h

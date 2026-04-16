@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BondUp – Friendship Network</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<script src="app.js" defer></script> pr
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+  <div class="dots-bg" id="dotsBg"></div>
+  <div class="toast" id="toast"><span id="toastIcon"></span><span id="toastMsg"></span></div>
+
+  <!-- Forgot Password Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <h2>🔑 Reset Password</h2>
+      <p>Enter your registered email and we'll send a reset link right away.</p>
+      <div class="input-group">
+        <label for="resetEmail">Email Address</label>
+        <div class="input-wrap">
+          <input type="email" id="resetEmail" placeholder="you@example.com"/>
+          <span class="icon">✉️</span>
+        </div>
+        <span class="error-msg" id="resetEmailErr"></span>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-m-cancel" id="modalCancel">Cancel</button>
+        <button class="btn-m-send"   id="modalSend">Send Reset Link</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Photo Picker Modal -->
+  <div class="photo-modal-overlay" id="photoModalOverlay">
+    <div class="photo-modal">
+      <h2>📸 Change Profile Photo</h2>
+      <p>Pick an avatar or upload a photo from your device.</p>
+      <div class="photo-preview-wrap" id="photoPreview">😊</div>
+      <span class="preset-label">Choose an Avatar</span>
+      <div class="preset-grid" id="presetGrid"></div>
+      <div class="upload-zone" id="uploadZone">
+        <div class="u-icon">🖼️</div>
+        <p>Drag & drop a photo, or <span>click to browse</span></p>
+      </div>
+      <input type="file" id="photoInput" accept="image/*"/>
+      <div class="photo-actions">
+        <button class="btn-ph-cancel" id="photoCancel">Cancel</button>
+        <button class="btn-ph-apply"  id="photoApply">Apply Photo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 1: LOGIN -->
+  <div class="page active" id="loginPage">
+    <div class="login-card">
+      <div class="brand">
+        <div class="brand-icon">🤝</div>
+        <div class="brand-name">BondUp</div>
+        <div class="brand-tagline">Connect · Share · Belong</div>
+      </div>
+
+      <!-- Server status badge -->
+      <div id="serverBadge" class="server-badge checking">⏳ Checking server…</div>
+
+      <div class="form-title">Welcome back 👋</div>
+      <div class="form-sub">Sign in to reconnect with your friends.</div>
+      <div class="input-group">
+        <label for="username">Username</label>
+        <div class="input-wrap">
+          <input type="text" id="username" placeholder="e.g. ronak_gupta" autocomplete="username"/>
+          <span class="icon">👤</span>
+        </div>
+        <span class="error-msg" id="usernameErr"></span>
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <div class="input-wrap">
+          <input type="password" id="password" placeholder="Your secret password" autocomplete="current-password"/>
+          <span class="icon">🔒</span>
+          <button class="toggle-pw" id="togglePw" type="button" aria-label="Toggle password">👁️</button>
+        </div>
+        <span class="error-msg" id="passwordErr"></span>
+      </div>
+      <div class="forgot-row">
+        <span class="forgot-link" id="forgotLink" role="button" tabindex="0">Forgot password?</span>
+      </div>
+      <button class="btn-login" id="loginBtn" type="button">
+        <span id="btnText">Sign In</span>
+        <div class="spinner" id="btnSpinner"></div>
+      </button>
+      <div class="divider"><span></span><p>New here?</p><span></span></div>
+      <div class="signup-row">Don't have an account? <a id="signupLink" tabindex="0">Create one free →</a></div>
+    </div>
+  </div>
+
+  <!-- PAGE 2: DASHBOARD -->
+  <div class="page" id="dashPage">
+    <nav class="navbar">
+      <div class="nav-logo">BondUp</div>
+      <div class="nav-center">
+        <button class="nav-btn active">🏠 Home</button>
+        <button class="nav-btn">👥 Friends</button>
+        <button class="nav-btn">💬 Messages</button>
+      </div>
+      <div class="nav-right">
+        <div class="nav-avatar" id="navAvatar">R</div>
+        <button class="logout-btn" id="logoutBtn">Log Out</button>
+      </div>
+    </nav>
+
+    <div class="dash-container">
+
+      <!-- LEFT SIDEBAR -->
+      <aside class="left-sidebar">
+        <div class="d-card" style="padding:0;overflow:hidden;">
+          <div class="profile-cover"></div>
+          <div style="padding:0 18px 0;">
+            <div class="profile-avatar-wrap" id="profileAvatarWrap" title="Change photo">
+              <div class="avatar-inner" id="avatarInner">😊</div>
+              <div class="cam-overlay">
+                <div class="cam-icon">📷</div>
+                <div class="cam-text">Change</div>
+              </div>
+            </div>
+            <div class="profile-name" id="dashUsername">Ronak Gupta</div>
+            <div class="profile-sub">Student · MITS-DU</div>
+            <div class="profile-stats">
+              <div><div class="stat-num" id="friendCount">2</div><div class="stat-lbl">Friends</div></div>
+              <div><div class="stat-num">12</div><div class="stat-lbl">Posts</div></div>
+              <div><div class="stat-num">5</div><div class="stat-lbl">Groups</div></div>
+            </div>
+          </div>
+          <button class="change-photo-btn" id="changePhotoBtn">📷 Change Profile Photo</button>
+        </div>
+
+        <div class="d-card">
+          <div class="d-card-title">Quick Links</div>
+          <div class="quick-link active-link" id="ql-home">   <span>🏠</span><span>Home</span></div>
+          <div class="quick-link" id="ql-friends">            <span>👥</span><span>My Friends</span></div>
+          <div class="quick-link" id="ql-bday">              <span>🎂</span><span>Birthdays</span></div>
+          <div class="quick-link" id="ql-photos">            <span>📸</span><span>Photos</span></div>
+          <div class="quick-link" id="ql-events">            <span>🏷️</span><span>Events</span></div>
+          <div class="quick-link" id="ql-messages">          <span>💬</span><span>Messages</span></div>
+          <div class="quick-link" id="ql-saved">             <span>🔖</span><span>Saved Posts</span></div>
+        </div>
+      </aside>
+
+      <!-- MAIN -->
+      <main>
+        <!-- Home view -->
+        <div id="homeView">
+
+          <!-- ── CREATE POST COMPOSER ── -->
+          <div class="create-post-card">
+            <div class="composer-top">
+              <div class="composer-av" id="composerAv">😊</div>
+              <input class="composer-input" id="postTextInput" placeholder="What's on your mind?"/>
+            </div>
+
+            <!-- Image preview strip -->
+            <div class="img-preview-strip" id="imgPreviewStrip"></div>
+
+            <!-- Mood row (hidden until feeling btn clicked) -->
+            <div class="mood-row" id="moodRow" style="display:none;">
+              <span style="font-size:0.78rem;color:var(--muted);font-weight:700;align-self:center;">Feeling:</span>
+              <div class="mood-chip" data-mood="😊 Happy">😊 Happy</div>
+              <div class="mood-chip" data-mood="🥳 Excited">🥳 Excited</div>
+              <div class="mood-chip" data-mood="😌 Relaxed">😌 Relaxed</div>
+              <div class="mood-chip" data-mood="😢 Sad">😢 Sad</div>
+              <div class="mood-chip" data-mood="😤 Frustrated">😤 Frustrated</div>
+              <div class="mood-chip" data-mood="🤩 Thrilled">🤩 Thrilled</div>
+              <div class="mood-chip" data-mood="😴 Tired">😴 Tired</div>
+              <div class="mood-chip" data-mood="💪 Motivated">💪 Motivated</div>
+            </div>
+
+            <div class="composer-divider"></div>
+            <div class="composer-actions">
+              <button class="composer-btn" id="photoAttachBtn" title="Add photos">
+                <span class="cb-icon">📷</span> Photo
+              </button>
+              <button class="composer-btn" id="feelingBtn" title="Express feeling">
+                <span class="cb-icon">😊</span> Feeling
+              </button>
+              <button class="composer-post-btn" id="submitPostBtn">Post</button>
+            </div>
+            <input type="file" id="postImgInput" accept="image/*" multiple/>
+          </div>
+
+          <!-- ── FEED ── -->
+          <div class="feed-head">
+            <h3>📰 Your Feed</h3>
+            <div class="feed-filter">
+              <button class="feed-filter-btn active" data-ff="all">All</button>
+              <button class="feed-filter-btn" data-ff="photos">📷 Photos</button>
+              <button class="feed-filter-btn" data-ff="text">💬 Text</button>
+            </div>
+          </div>
+          <div id="postFeed"></div>
+
+          <!-- Divider -->
+          <div style="height:1px;background:var(--border);margin:8px 0 24px;"></div>
+
+          <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="🔍  Search friends by name…"/>
+            <button onclick="filterPeople()">Search</button>
+          </div>
+          <div class="section-head">
+            <h3>👋 People You May Know</h3>
+            <span class="see-all">See all</span>
+          </div>
+          <div class="people-grid" id="peopleGrid"></div>
+          <div class="section-head">
+            <h3>🤝 My Friends</h3>
+            <span class="see-all">Manage</span>
+          </div>
+          <div class="people-grid" id="myFriendsGrid"></div>
+        </div>
+
+        <!-- Birthday panel -->
+        <div class="bday-panel" id="bdayPanel">
+          <button class="back-btn" id="bdayBackBtn">← Back to Home</button>
+          <div id="bdayAlertArea"></div>
+          <div class="bday-form-card">
+            <div class="bday-form-title"><span>🎂</span> Add a Friend's Birthday</div>
+            <div class="bday-form-grid">
+              <div class="bday-field">
+                <label for="bdayName">Friend's Name</label>
+                <input type="text" id="bdayName" placeholder="e.g. Priya Sharma" maxlength="40"/>
+              </div>
+              <div class="bday-field">
+                <label for="bdayDate">Birthday Date</label>
+                <input type="date" id="bdayDate"/>
+              </div>
+            </div>
+            <span class="emoji-label">Pick an Avatar</span>
+            <div class="bday-emoji-row" id="bdayEmojiRow"></div>
+            <div class="bday-form-error" id="bdayFormErr"></div>
+            <button class="btn-add-bday" id="addBdayBtn">🎉 Add Birthday</button>
+          </div>
+          <div class="bday-list-card">
+            <div class="bday-list-header">
+              <h3>🎈 All Birthdays</h3>
+              <span class="bday-count-pill" id="bdayCountPill">0</span>
+            </div>
+            <div class="bday-tabs">
+              <button class="bday-tab active" data-filter="all">All</button>
+              <button class="bday-tab" data-filter="upcoming">Next 30 Days</button>
+              <button class="bday-tab" data-filter="month">This Month</button>
+            </div>
+            <div id="bdayList">
+              <div class="bday-empty">
+                <div class="empty-icon">🎂</div>
+                <p>No birthdays added yet.<br/>Add your first friend above!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── MESSAGES PANEL ── -->
+        <div class="msg-panel" id="msgPanel">
+          <button class="back-btn" id="msgBackBtn">← Back to Home</button>
+
+          <div class="msg-layout">
+            <!-- Conversation list (left column) -->
+            <div class="msg-sidebar">
+              <div class="msg-sidebar-header">
+                <h3>💬 Messages</h3>
+                <div class="msg-search-wrap">
+                  <input type="text" id="msgSearch" placeholder="Search conversations…" oninput="filterConversations()"/>
+                </div>
+              </div>
+              <div id="convList"></div>
+              <div id="convEmpty" class="msg-empty-state" style="display:none;">
+                <div class="msg-empty-icon">💬</div>
+                <p>No conversations yet.<br/>Send a message to a friend!</p>
+              </div>
+            </div>
+
+            <!-- Active chat (right column) -->
+            <div class="msg-chat-area" id="msgChatArea">
+              <div class="msg-no-chat" id="msgNoChat">
+                <div style="font-size:3rem;margin-bottom:14px;">💌</div>
+                <p>Select a conversation<br/>to start chatting</p>
+              </div>
+              <!-- Chat window (shown when a conversation is selected) -->
+              <div class="msg-chat-window" id="msgChatWindow" style="display:none;">
+                <div class="msg-chat-header" id="msgChatHeader">
+                  <div class="msg-chat-av" id="msgChatAv">😊</div>
+                  <div>
+                    <div class="msg-chat-name" id="msgChatName">Friend</div>
+                    <div class="msg-chat-status">Active now</div>
+                  </div>
+                </div>
+                <div class="msg-bubble-area" id="msgBubbleArea"></div>
+                <div class="msg-input-row">
+                  <div class="msg-input-av" id="msgInputAv">😊</div>
+                  <input type="text" id="msgInput" class="msg-input" placeholder="Type a message…"/>
+                  <button class="msg-emoji-btn" id="msgEmojiBtn" title="Emoji">😊</button>
+                  <button class="msg-send-btn" id="msgSendBtn">➤</button>
+                </div>
+                <!-- Emoji picker -->
+                <div class="msg-emoji-picker" id="msgEmojiPicker" style="display:none;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- RIGHT SIDEBAR -->
+      <aside class="right-sidebar">
+        <div class="d-card">
+          <div class="d-card-title">📨 Friend Requests <span class="badge" id="reqBadge">2</span></div>
+          <div id="requestsList">
+            <div class="req-item" id="req1">
+              <div class="req-avatar" style="background:rgba(247,55,110,0.15);">😄</div>
+              <div class="req-info">
+                <strong>Sneha Patel</strong><span>3 mutual friends</span>
+                <div class="req-btns">
+                  <button class="btn-confirm" onclick="acceptRequest('req1','Sneha Patel','😄','linear-gradient(135deg,#f7376e,#ff8c42)')">Confirm</button>
+                  <button class="btn-decline" onclick="declineRequest('req1')">Delete</button>
+                </div>
+              </div>
+            </div>
+            <div class="req-item" id="req2">
+              <div class="req-avatar" style="background:rgba(167,139,250,0.15);">🧑‍💻</div>
+              <div class="req-info">
+                <strong>Arjun Verma</strong><span>7 mutual friends</span>
+                <div class="req-btns">
+                  <button class="btn-confirm" onclick="acceptRequest('req2','Arjun Verma','🧑‍💻','linear-gradient(135deg,#a78bfa,#f7376e)')">Confirm</button>
+                  <button class="btn-decline" onclick="declineRequest('req2')">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p id="noRequests" style="color:var(--muted);font-size:0.83rem;display:none;">No pending requests 🎉</p>
+        </div>
+        <div class="stat-glow-box">
+          <h4>📊 Network Stats</h4>
+          <div class="stat-row"><span>Total Members</span><strong>150</strong></div>
+          <div class="stat-row"><span>Connections</span><strong>430</strong></div>
+          <div class="stat-row"><span>Algorithm</span><strong>BFS</strong></div>
+          <div class="stat-row"><span>Your Rank</span><strong>#42</strong></div>
+        </div>
+        <div class="d-card">
+          <div class="d-card-title">🔔 Recent Activity</div>
+          <div class="activity-item">
+            <div class="act-icon" style="background:rgba(247,55,110,0.15);">❤️</div>
+            <div class="act-text"><strong>Mansi Gupta</strong> liked your post<div class="act-time">2 min ago</div></div>
+          </div>
+          <div class="activity-item">
+            <div class="act-icon" style="background:rgba(167,139,250,0.15);">💬</div>
+            <div class="act-text"><strong>Prateek Singh</strong> commented on your photo<div class="act-time">18 min ago</div></div>
+          </div>
+          <div class="activity-item">
+            <div class="act-icon" style="background:rgba(74,222,128,0.1);">🤝</div>
+            <div class="act-text"><strong>Amit Shukla</strong> accepted your request<div class="act-time">1 hr ago</div></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+<script src="app.js" defer></script>
+
+  <!-- Send Message Modal (quick message from friend card) -->
+  <div class="send-msg-overlay" id="sendMsgOverlay">
+    <div class="send-msg-modal">
+      <div class="send-msg-header">
+        <div class="send-msg-av" id="sendMsgAv">😊</div>
+        <div>
+          <div class="send-msg-name" id="sendMsgName">Friend</div>
+          <div class="send-msg-sub">Send a message</div>
+        </div>
+        <button class="send-msg-close" id="sendMsgClose">✕</button>
+      </div>
+      <div class="send-msg-preview" id="sendMsgPreview"></div>
+      <div class="send-msg-input-row">
+        <input type="text" id="sendMsgInput" class="send-msg-input" placeholder="Type your message…" maxlength="500"/>
+        <button class="send-msg-btn" id="sendMsgBtn">Send ➤</button>
+      </div>
+      <div class="send-msg-quick-label">Quick replies</div>
+      <div class="send-msg-quick-row" id="sendMsgQuickRow"></div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose">✕</button>
+    <img id="lightboxImg" src="" alt=""/>
+  </div>
+
+</body>
+</html>
