@@ -1,0 +1,25 @@
+# Compiled binaries
+*.exe
+*.o
+*.obj
+
+# IDE
+.vs/
+.vscode/
+*.suo
+*.user
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Old reference files (not needed for deployment)
+/Frontend/
+/Backend/
+
+# Data files (generated at runtime)
+data.json
+
+# Temp
+*.7z
+*.tmp
