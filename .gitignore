@@ -14,13 +14,18 @@ server
 Thumbs.db
 .DS_Store
 
+# Old reference folders (not part of deployment)
+Frontend/
+Backend/
+backend/FriendshipNetwork-version-1.0-1/
+
+# Unnecessary backend headers (not needed for deployment)
+backend/mingw.*.h
+backend/httplib.h
+
 # Data files
 data.json
 
 # Temp
 *.7z
 *.tmp
-
-# MinGW compatibility headers (not needed for deployment)
-backend/mingw.*.h
-backend/httplib.h

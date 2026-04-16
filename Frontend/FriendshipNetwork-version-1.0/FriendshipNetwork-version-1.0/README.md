@@ -1,2 +1,0 @@
-# FriendshipNetwork
-Micro Project
